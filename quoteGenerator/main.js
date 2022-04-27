@@ -4,6 +4,7 @@ const authorText=document.getElementById('author');
 const twitterBtn=document.getElementById('twitter');
 const newQuoteBtn=document.getElementById('new-quote');
 const loader = document.getElementById('loader');
+const anime_title=document.getElementById('anime-title');
 
 
 /* Show loader */
@@ -21,35 +22,45 @@ function complete(){
 }
 
 /* Get quote from API */
-async function getQuote(){
-    loading();
-    const proxyUrl= 'https://cors-anywhere.herokuapp.com/';
-    const apiUrl='http://api.forismatic.com/api/1.0/?method=getQuote&lang=en&format=json';
-    try{
-        const response = await fetch(proxyUrl+apiUrl);
-        const data = await response.json();
-        /* if author is blanck, add unknown */
-        if(data.quoteAuthor===''){
-            authorText.innerText="unkown"
-        }
-        else{
-            authorText.innerText = data.quoteAuthor;
-        }
+// function getQuote(){
+//     loading();
+//    fetch('https://animechan.vercel.app/api/random/')
+//         .this(response=>console.log(response));
+//     complete();
+// }
+// async function getQuote(){
+//     loading();
+//     const proxyUrl= 'https://cors-anywhere.herokuapp.com/';
+//     const apiUrl='https://animechan.vercel.app/api/random/';
+//     try{
+//         const response = await fetch(apiUrl);
+//         const data = await response.json();
+//         console.log(data.quote);
+//         /* if author is blanck, add unknown */ 
+   
+//         if(data.quoteAuthor===''){
+//             authorText.innerText="unkown"
+//         }
+//         else{
+//             authorText.innerText = data.quoteAuthor;
+//         }
 
-        /* reduce font size if long text */
-        if(data.quoteText.length > 120){
-            quoteText.classList.add('long-quote')
-        }else{
-            quoteText.classList.remove('long-quote');
-        }
-        quoteText.innerText= data.quoteText;
-        //Stop Loader and show Quote
-        complete(); 
-    }catch(error){
-        // getQuote();
-        console.log("whoops no quote",error);
-    }
-}
+//         /* reduce font size if long text */
+//         if(data.quote.length > 120){
+//             quoteText.classList.add('long-quote')
+//         }else{
+//             quoteText.classList.remove('long-quote');
+//         }
+//         quoteText.innerText= data.quote;
+//         //Stop Loader and show Quote
+//         complete(); 
+//     }catch(error){
+//         // getQuote();
+//         console.log("whoops no quote",error);
+//     }
+// }
+
+
 // tweet quote
 function tweetQuote(){
     const quote= quoteText.innerText;
@@ -60,6 +71,25 @@ function tweetQuote(){
 // Event listeners
 newQuoteBtn.addEventListener('click',getQuote);
 twitterBtn.addEventListener('click',tweetQuote);
+
+
+async function getQuote(){
+    loading();
+    const responce= await fetch('https://animechan.vercel.app/api/random');
+    const data= await responce.json();
+    console.log("come on: ",data);
+    quoteText.innerText=data.quote;
+    anime_title.innerText=data.anime;
+    if(data.quote.length > 120){
+        quoteText.classList.add('long-quote');
+        console.log("it is longer that shit ");
+    }
+    else{
+        quoteText.classList.remove('long-quote');
+    }
+    console.log(data);
+    complete();
+}
 
 // On Load
 getQuote();
